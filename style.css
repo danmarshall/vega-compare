@@ -1,0 +1,33 @@
+html {
+    height: 100%;
+}
+body {
+    display: grid;
+    font-family: sans-serif;
+    grid-template-rows: 0fr auto;
+    height: 100%;
+    margin: 0;
+}
+header, section {
+    padding: 1em;
+}
+main {
+    display: grid;
+    grid-template-rows: 40% 60%;
+}
+h1 {
+    font-size: medium;
+}
+iframe, textarea {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+#input {
+    display:grid;
+    grid-template-rows: 0fr auto;
+}
+#output {
+    display:grid;
+    grid-template-columns: 50% 50%;
+}

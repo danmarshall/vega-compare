@@ -1,12 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Compare Vega4 - Vega5</title>
+    <link rel="stylesheet" href="style.css" />
+    <script>
+        var spec = null;
+        var textarea = null;
+        function parse() {
+            try {
+                spec = JSON.parse(textarea.value);
+                return true;
+            } catch (e) {
+                console.log(e);
+            }
+        }
+    </script>
 </head>
+
 <body>
-    hello world
+
+    <header>
+        <h1>Compare Vega4 to Vega5</h1>
+    </header>
+
+    <main>
+        <section id="input">
+            <label>Spec</label>
+            <textarea>
+{
+    "$schema": "https://vega.github.io/schema/vega/v5.json",
+    "width": 500,
+    "height": 200,
+    "padding": 5,
+    
+    "data": [
+        {
+        "name": "table",
+        "values": [
+            {"x": 0, "y": 28, "c":0}, {"x": 0, "y": 55, "c":1}, {"x": 0, "y": 15, "c":2},
+            {"x": 1, "y": 43, "c":0}, {"x": 1, "y": 91, "c":1}, {"x": 1, "y": 22, "c":2},
+            {"x": 2, "y": 81, "c":0}, {"x": 2, "y": 53, "c":1}, {"x": 2, "y": 64, "c":2},
+            {"x": 3, "y": 19, "c":0}, {"x": 3, "y": 87, "c":1}, {"x": 3, "y": 17, "c":2},
+            {"x": 4, "y": 52, "c":0}, {"x": 4, "y": 48, "c":1}, {"x": 4, "y": 78, "c":2},
+            {"x": 5, "y": 24, "c":0}, {"x": 5, "y": 49, "c":1}, {"x": 5, "y": 59, "c":2},
+            {"x": 6, "y": 87, "c":0}, {"x": 6, "y": 66, "c":1}, {"x": 6, "y": 46, "c":2},
+            {"x": 7, "y": 17, "c":0}, {"x": 7, "y": 27, "c":1}, {"x": 7, "y": 17, "c":2},
+            {"x": 8, "y": 68, "c":0}, {"x": 8, "y": 16, "c":1}, {"x": 8, "y": 36, "c":2},
+            {"x": 9, "y": 49, "c":0}, {"x": 9, "y": 15, "c":1}, {"x": 9, "y": 55, "c":2}
+        ],
+        "transform": [
+            {
+            "type": "stack",
+            "groupby": ["x"],
+            "sort": {"field": "c"},
+            "field": "y"
+            }
+        ]
+        }
+    ],
+    
+    "signals": [
+        {
+        "name": "quantizecount",
+        "value": 4,
+        "bind": {
+            "input": "range",
+            "min": 1,
+            "max": 20,
+            "step": 1
+        }
+        }
+    ],
+    
+    "scales": [
+        {
+        "name": "x",
+        "type": "band",
+        "range": "width",
+        "domain": {"data": "table", "field": "x"}
+        },
+        {
+        "name": "y",
+        "type": "linear",
+        "range": "height",
+        "nice": true, "zero": true,
+        "domain": {"data": "table", "field": "y1"}
+        },
+        {
+        "name": "color",
+        "type": "quantize",
+        "range": {"scheme": "redyellowblue", "count": {"signal": "quantizecount"}},
+        "domain": {"data": "table", "field": "y"}
+        }
+    ],
+    
+    "axes": [
+        {"orient": "bottom", "scale": "x", "zindex": 1},
+        {"orient": "left", "scale": "y", "zindex": 1}
+    ],
+    
+    "marks": [
+        {
+        "type": "rect",
+        "from": {"data": "table"},
+        "encode": {
+            "update": {
+            "x": {"scale": "x", "field": "x"},
+            "width": {"scale": "x", "band": 1, "offset": -1},
+            "y": {"scale": "y", "field": "y0"},
+            "y2": {"scale": "y", "field": "y1"},
+            "fill": {"scale": "color", "field": "y"}
+            }
+        }
+        }
+    ]
+}
+        </textarea>
+            <script>
+                textarea = document.getElementsByTagName('textarea')[0];
+                textarea.onkeyup = () => {
+                    if (parse()) {
+                        Array.from(frames).forEach(f => f.render());
+                    }
+                };
+                parse();                
+            </script>
+        </section>
+
+        <section id="output">
+            <iframe src="vega4.html"></iframe>
+            <iframe src="vega5.html"></iframe>
+        </section>
+    </main>
+
 </body>
+
 </html>
